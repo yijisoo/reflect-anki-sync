@@ -26,39 +26,6 @@
 #    - For #cloze tags, only the first bullet point will be used, and it should contain the cloze deletion format
 #      (e.g., {{c1::cloze}}).
 
-# 3. Example Note Structure:
-#    - Spaced Repetition:
-#      <p><a href="https://reflect.app/g/yijisoo/tag/spaced" data-editor-tag="spaced">#spaced</a></p>
-#      <p>This is a question</p>
-#      <p>This is an answer</p>
-
-#    - Reversed Card:
-#      <p><a href="https://reflect.app/g/yijisoo/tag/reversed" data-editor-tag="reversed">#reversed</a></p>
-#      <p>This is a question</p>
-#      <p>This is an answer</p>
-
-#    - Type in the Answer:
-#      <p><a href="https://reflect.app/g/yijisoo/tag/type" data-editor-tag="type">#type</a></p>
-#      <p>This is a question</p>
-#      <p>This is an answer</p>
-
-#    - Cloze Deletion:
-#      <p><a href="https://reflect.app/g/yijisoo/tag/cloze" data-editor-tag="cloze">#cloze</a></p>
-#      <p>This is a {{c1::cloze}} card</p>
-
-# 4. Nested Bullet Lists:
-#    - For nested bullet lists, the first bullet point will be treated as the question, and the subsequent bullet points
-#      will be treated as answers.
-#    - Example:
-#      <div class="prosemirror-flat-list" data-list-kind="bullet">
-#        <p><a href="https://reflect.app/g/yijisoo/tag/spaced" data-editor-tag="spaced">#spaced</a></p>
-#        <div class="prosemirror-flat-list" data-list-kind="bullet">
-#          <p>Question A</p>
-#        </div>
-#        <div class="prosemirror-flat-list" data-list-kind="bullet">
-#          <p>Answer A</p>
-#        </div>
-#      </div>
 
 require 'fileutils'
 require 'csv'
