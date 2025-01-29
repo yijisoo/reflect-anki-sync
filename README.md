@@ -53,7 +53,7 @@ Use specific tags to identify the type of note. The supported tags are:
 
 ## Limitations
 
-Due to the end-to-end encryption implemented by Reflect.app, it is not possible to build a more automated solution for accessing and processing the data. The current Reflect.app API does not support direct information access, which is why manual export and conversion are necessary.
+Due to the end-to-end encryption implemented by Reflect.app, it is not possible to build a more automated solution for accessing and processing the data. The current [Reflect.app API](https://reflect.academy/api) does not support direct information access (it's Append Only except for the limited information), which is why manual export and conversion are necessary.
 
 ## License
 
