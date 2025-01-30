@@ -32,9 +32,17 @@ require 'csv'
 require 'time'
 require 'nokogiri'
 
+# Define constants. Update this as needed.
+# Note: The patterns are case-sensitive.
+
+# Source directory for CSV files
+source_path = '~/Downloads'
+destination_path = 'reflect-dumps'
+anki_deck_name = 'Reflect'
+
 # Define the source and destination directories
-source_dir = File.expand_path('~/Downloads')
-destination_dir = File.join(Dir.pwd, 'reflect-dumps')
+source_dir = File.expand_path(source_path)
+destination_dir = File.join(Dir.pwd, destination_path)
 
 puts "Source directory: #{source_dir}"
 puts "Destination directory: #{destination_dir}"
@@ -126,20 +134,20 @@ def parse_csv_file(csv_file_path)
 
             if pattern == :cloze
               cloze_text = question
-              if cloze_text && !anki_import_lines.include?("Cloze\tReflect\t#{cloze_text}\t\t")
+              if cloze_text && !anki_import_lines.include?("Cloze\t#{anki_deck_name}\t#{cloze_text}\t\t")
                 puts "Found ##{pattern} pattern: #{cloze_text}"
-                anki_import_lines << "Cloze\tReflect\t#{cloze_text}\t\t"
+                anki_import_lines << "Cloze\t#{anki_deck_name}\t#{cloze_text}\t\t"
               end
             elsif question && answers.any?
               answers_text = answers.map { |answer| answer.include?("\n") ? "\"#{answer}\"" : answer }.join("\n")
               puts "Found ##{pattern} pattern: Question: #{question}, Answer: #{answers_text}"
               case pattern
               when :spaced
-                anki_import_lines << "Basic\tReflect\t#{question}\t#{answers_text}\t"
+                anki_import_lines << "Basic\t#{anki_deck_name}\t#{question}\t#{answers_text}\t"
               when :reversed
-                anki_import_lines << "Basic (and reversed card)\tReflect\t#{question}\t#{answers_text}\t"
+                anki_import_lines << "Basic (and reversed card)\t#{anki_deck_name}\t#{question}\t#{answers_text}\t"
               when :type
-                anki_import_lines << "Basic (type in the answer)\tReflect\t#{question}\t#{answers_text}\t"
+                anki_import_lines << "Basic (type in the answer)\t#{anki_deck_name}\t#{question}\t#{answers_text}\t"
               end
             else
               puts "Pattern ##{pattern} not matched properly for row with id: #{row['id']}"
