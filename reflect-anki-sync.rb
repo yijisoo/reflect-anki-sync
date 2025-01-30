@@ -104,41 +104,45 @@ def parse_csv_file(csv_file_path)
       # Parse HTML
       doc = Nokogiri::HTML(document_html)
 
-      # Process each pattern
-      valid_patterns.each do |name|
-        doc.css("a[data-editor-tag='#{name}']").each do |tag|
-          parent = tag.parent
-          question = nil
-          answers = []
+      # Find all relevant <p> elements
+      doc.css('div.prosemirror-flat-list div.list-content p').each do |p|
+        valid_patterns.each do |pattern|
+          if p.text.include?("##{pattern}")
+            parent = p.parent
+            question = nil
+            answers = []
 
-          # Search for sub bullets for question and answer
-          sub_bullets = parent.css('div.prosemirror-flat-list p')
-          if sub_bullets.size >= 2
-            question = sub_bullets[0]&.text&.strip
-            answers = sub_bullets[1..-1].map { |bullet| bullet.text.strip }
-          else
-            # Handle original format
-            question = parent.next_element&.text&.strip
-            answer = parent.next_element&.next_element&.text&.strip
-            answers << answer if answer
-          end
-
-          if name == :cloze
-            cloze_text = question
-            if cloze_text && !anki_import_lines.include?("Cloze\tReflect\t#{cloze_text}\t\t")
-              puts "Found ##{name} pattern: #{cloze_text}"
-              anki_import_lines << "Cloze\tReflect\t#{cloze_text}\t\t"
+            # Search for sub bullets for question and answer
+            sub_bullets = parent.css('div.prosemirror-flat-list div.list-content p')
+            if sub_bullets.size >= 2
+              question = sub_bullets[0]&.text&.strip
+              answers = sub_bullets[1..-1].map { |bullet| bullet.text.strip }
+            else
+              # Handle original format
+              question = parent.next_element&.text&.strip
+              answer = parent.next_element&.next_element&.text&.strip
+              answers << answer if answer
             end
-          elsif question && answers.any?
-            answers_text = answers.map { |answer| answer.include?("\n") ? "\"#{answer}\"" : answer }.join("\n")
-            puts "Found ##{name} pattern: Question: #{question}, Answer: #{answers_text}"
-            case name
-            when :spaced
-              anki_import_lines << "Basic\tReflect\t#{question}\t#{answers_text}\t"
-            when :reversed
-              anki_import_lines << "Basic (and reversed card)\tReflect\t#{question}\t#{answers_text}\t"
-            when :type
-              anki_import_lines << "Basic (type in the answer)\tReflect\t#{question}\t#{answers_text}\t"
+
+            if pattern == :cloze
+              cloze_text = question
+              if cloze_text && !anki_import_lines.include?("Cloze\tReflect\t#{cloze_text}\t\t")
+                puts "Found ##{pattern} pattern: #{cloze_text}"
+                anki_import_lines << "Cloze\tReflect\t#{cloze_text}\t\t"
+              end
+            elsif question && answers.any?
+              answers_text = answers.map { |answer| answer.include?("\n") ? "\"#{answer}\"" : answer }.join("\n")
+              puts "Found ##{pattern} pattern: Question: #{question}, Answer: #{answers_text}"
+              case pattern
+              when :spaced
+                anki_import_lines << "Basic\tReflect\t#{question}\t#{answers_text}\t"
+              when :reversed
+                anki_import_lines << "Basic (and reversed card)\tReflect\t#{question}\t#{answers_text}\t"
+              when :type
+                anki_import_lines << "Basic (type in the answer)\tReflect\t#{question}\t#{answers_text}\t"
+              end
+            else
+              puts "Pattern ##{pattern} not matched properly for row with id: #{row['id']}"
             end
           end
         end
