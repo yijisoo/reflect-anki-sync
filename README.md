@@ -29,7 +29,6 @@ Use specific tags to identify the type of note. The supported tags are:
 
 ### Example Note Structure
 - **Spaced Repetition:**
-- 
   - #spaced
     - This is a question
     - This is a first line of answer
