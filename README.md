@@ -47,7 +47,7 @@ Use specific tags to identify the type of note. The supported tags are:
 
 - **Cloze Deletion:**
   - #cloze
-    - This is a {{c1:cloze}} question.
+    - This is a {{c1::cloze}} question.
 
 
 ## Limitations
